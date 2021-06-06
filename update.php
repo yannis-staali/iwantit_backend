@@ -40,18 +40,23 @@ if(isset($_POST['submit']))
         $suiteId = $imploId[$y];
 
         //on lance l'update avec une transaction pour s'assurer de l'intégrité des données
-        try{
+        try
+        {
             $connexion->beginTransaction();
+
              //on lance l'update par chunk de 10000 rows
             $query3 = $connexion->prepare("UPDATE iwantit SET email_provider= (CASE id {$launch} END) WHERE id IN ({$suiteId}) ");
             $query3->execute();
+            
             $connexion->commit();
-        } catch (Exception $e){
+        } 
+        catch (Exception $e)
+        {
             $connexion->rollBack();
             echo 'Failed:' . $e->getMessage();
         }
 
-        //on unset toutes les variables pour liberer la mémoire
+        //on unset toutes les variables pour liberer la mémoire entre chaque boucle
         unset($value);
         unset($listId);
         unset($result2);
